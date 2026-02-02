@@ -43,10 +43,8 @@ const ProductList = ({ products }) => {
     const handlePageChange = (event, value) => {
         setCurrentPage(value);
         if (swiperRef.current && swiperRef.current.swiper) {
-            // Swiper grid with 2 rows: 1 slide per page in Swiper terminology 
-            // represents 4 products (2x2). So slide index 0 is products 0-3, 
-            // slide index 1 is products 4-7, etc.
-            swiperRef.current.swiper.slideTo(value - 1);
+            // Khóa cứng: Trang 1 nhảy về cột 0, Trang 2 nhảy về cột 2...
+            swiperRef.current.swiper.slideTo((value - 1) * 2);
         }
     };
 
@@ -56,6 +54,7 @@ const ProductList = ({ products }) => {
             <div className="relative group/list">
                 <Swiper
                     slidesPerView={2}
+                    slidesPerGroup={2}
                     grid={{
                         rows: 2,
                         fill: 'row'
@@ -63,14 +62,17 @@ const ProductList = ({ products }) => {
                     spaceBetween={10}
                     modules={[Grid, Navigation]}
                     onSlideChange={(swiper) => {
-                        // Sync MUI Pagination when swiper is dragged/changed manually
-                        setCurrentPage(swiper.activeIndex + 1);
+                        // snapIndex là chỉ số cụm (trang) hiện tại, cực kỳ chính xác
+                        const newPage = swiper.snapIndex + 1;
+                        if (newPage !== currentPage) {
+                            setCurrentPage(newPage);
+                        }
                     }}
                     navigation={{
                         nextEl: '.swiper-button-next-custom',
                         prevEl: '.swiper-button-prev-custom',
                     }}
-                    className="mySwiper h-full w-full mb-6"
+                    className="mySwiper w-full mb-6 !h-[660px]"
                     ref={swiperRef}
                 >
                     {products.map((product, index) => {
