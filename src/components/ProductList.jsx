@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Grid, Navigation } from 'swiper/modules';
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
-import { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { Dialog, DialogContent, Button } from '@mui/material';
+import { Dialog, DialogContent, Button, Pagination } from '@mui/material';
 import { BsFillCartCheckFill } from "react-icons/bs";
 
 import 'swiper/css';
@@ -20,6 +19,11 @@ const ProductList = ({ products }) => {
     const navigate = useNavigate();
     const { addToCart } = useCart();
     const [showCartSuccessModal, setShowCartSuccessModal] = useState(false);
+
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 4; // 2 columns x 2 rows
+    const totalPages = Math.ceil(products.length / itemsPerPage);
 
     useEffect(() => {
         let timer;
@@ -36,6 +40,15 @@ const ProductList = ({ products }) => {
         navigate('/cart');
     };
 
+    const handlePageChange = (event, value) => {
+        setCurrentPage(value);
+        if (swiperRef.current && swiperRef.current.swiper) {
+            // Swiper grid with 2 rows: 1 slide per page in Swiper terminology 
+            // represents 4 products (2x2). So slide index 0 is products 0-3, 
+            // slide index 1 is products 4-7, etc.
+            swiperRef.current.swiper.slideTo(value - 1);
+        }
+    };
 
     return (
         <div className="p-4">
@@ -48,22 +61,20 @@ const ProductList = ({ products }) => {
                         fill: 'row'
                     }}
                     spaceBetween={10}
-                    // pagination={{
-                    //     clickable: true,
-                    // }}
                     modules={[Grid, Navigation]}
+                    onSlideChange={(swiper) => {
+                        // Sync MUI Pagination when swiper is dragged/changed manually
+                        setCurrentPage(swiper.activeIndex + 1);
+                    }}
                     navigation={{
                         nextEl: '.swiper-button-next-custom',
                         prevEl: '.swiper-button-prev-custom',
                     }}
-                    className="mySwiper h-full w-full"
+                    className="mySwiper h-full w-full mb-6"
                     ref={swiperRef}
                 >
                     {products.map((product, index) => {
-                        // Map JSON keys
                         const name = product['TÊN SẢN PHẨM'];
-
-                        // Format price as VND currency
                         const formatVND = (value) => {
                             if (typeof value === 'number') {
                                 return new Intl.NumberFormat('vi-VN', {
@@ -78,12 +89,10 @@ const ProductList = ({ products }) => {
                         const originalPrice = formatVND(product['GIÁ NIÊM YẾT']);
                         const hasDiscount = product['GIÁ NIÊM YẾT'] && product['GIÁ NIÊM YẾT'] > product['Giá sau chiết khấu'];
                         const code = product['MÃ SP'] || '';
-
-                        // Image strategy
                         const imageSrc = product['ảnh'] || (code ? `/products/${code}.jpg` : null);
 
                         return (
-                            <SwiperSlide key={index} className="!h-[300px]">
+                            <SwiperSlide key={index} className="!h-[310px]">
                                 <div
                                     className="bg-[#f5f5f5] flex flex-col justify-between h-full group relative"
                                 >
@@ -109,34 +118,14 @@ const ProductList = ({ products }) => {
                                                 {code}
                                             </div>
                                         )}
-
-                                        {/* Add to Cart Button - appears on hover */}
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                addToCart(product);
-                                                setShowCartSuccessModal(true);
-                                            }}
-                                            className="absolute bottom-2 left-1/2 -translate-x-1/2 
-                                                bg-red-600 text-white px-3 py-2 rounded-full 
-                                                opacity-0 group-hover:opacity-100 
-                                                transform translate-y-2 group-hover:translate-y-0
-                                                transition-all duration-300 ease-out
-                                                hover:bg-red-700 active:scale-95
-                                                flex items-center gap-1 text-[11px] font-semibold
-                                                shadow-lg z-20"
-                                        >
-                                            <BsFillCartCheckFill size={20} />
-                                            Thêm vào giỏ
-                                        </button>
                                     </div>
 
-                                    <div className="flex flex-col flex-grow p-4 pt-2">
-                                        <h3 className="text-sm font-medium text-[#1a1a1a] line-clamp-2 mb-2 text-center min-h-[40px] font-anton tracking-wide" title={name}>
+                                    <div className="flex flex-col flex-grow p-4 pt-2 gap-2">
+                                        <h3 className="text-sm font-medium text-[#1a1a1a] line-clamp-2 text-center min-h-[40px] font-anton tracking-wide" title={name}>
                                             {name || 'Sản phẩm mới'}
                                         </h3>
 
-                                        <div className="mt-auto flex flex-wrap justify-center items-center gap-2 text-sm">
+                                        <div className="flex flex-wrap justify-center items-center gap-2 text-sm">
                                             {hasDiscount && (
                                                 <span className="text-gray-400 line-through decoration-gray-400 text-xs">
                                                     {originalPrice}
@@ -146,6 +135,23 @@ const ProductList = ({ products }) => {
                                                 {price}
                                             </span>
                                         </div>
+
+                                        {/* Add to Cart Button - always visible */}
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                addToCart(product);
+                                                setShowCartSuccessModal(true);
+                                            }}
+                                            className="w-full bg-red-600 text-white py-2 rounded-full 
+                                                hover:bg-red-700 active:scale-95
+                                                transition-all duration-200
+                                                inline-flex items-center justify-center gap-1 text-[11px] font-semibold
+                                                shadow-md"
+                                        >
+                                            <BsFillCartCheckFill className="flex-shrink-0" size={11} />
+                                            <span>Thêm vào giỏ</span>
+                                        </button>
                                     </div>
                                 </div>
                             </SwiperSlide>
@@ -154,23 +160,44 @@ const ProductList = ({ products }) => {
                 </Swiper>
                 <button
                     onClick={() => swiperRef.current?.swiper?.slidePrev()}
-                    className="swiper-button-prev-custom absolute left-2 top-1/2 -translate-y-1/2 z-10 
-                        w-10 h-10 rounded-full !bg-black/40 !text-white flex items-center justify-center 
+                    className="swiper-button-prev-custom absolute left-2 top-[35%] -translate-y-1/2 z-10 
+                        w-8 h-8 rounded-full !bg-black/40 !text-white flex items-center justify-center 
                         opacity-0 group-hover/list:opacity-100 transition-all duration-300 backdrop-blur-sm shadow-lg border border-white/10 hover:!bg-black/60
                         [&.swiper-button-disabled]:invisible [&.swiper-button-disabled]:opacity-0"
                 >
-                    <IoIosArrowBack size={24} />
+                    <IoIosArrowBack size={20} />
                 </button>
 
                 <button
                     onClick={() => swiperRef.current?.swiper?.slideNext()}
-                    className="swiper-button-next-custom absolute right-2 top-1/2 -translate-y-1/2 z-10 
-                        w-10 h-10 rounded-full !bg-black/40 !text-white flex items-center justify-center 
+                    className="swiper-button-next-custom absolute right-2 top-[35%] -translate-y-1/2 z-10 
+                        w-8 h-8 rounded-full !bg-black/40 !text-white flex items-center justify-center 
                         opacity-0 group-hover/list:opacity-100 transition-all duration-300 backdrop-blur-sm shadow-lg border border-white/10 hover:!bg-black/60
                         [&.swiper-button-disabled]:invisible [&.swiper-button-disabled]:opacity-0"
                 >
-                    <IoIosArrowForward size={24} />
+                    <IoIosArrowForward size={20} />
                 </button>
+            </div>
+
+            {/* MUI Pagination */}
+            <div className="mt-8 flex justify-center">
+                <Pagination
+                    count={totalPages}
+                    page={currentPage}
+                    onChange={handlePageChange}
+                    color="error" // Uses the red theme
+                    size="small"
+                    siblingCount={1}
+                    boundaryCount={1}
+                    sx={{
+                        '& .MuiPaginationItem-root': {
+                            fontWeight: 'bold',
+                        },
+                        '& .Mui-selected': {
+                            backgroundColor: '#dc2626 !important', // red-600
+                        }
+                    }}
+                />
             </div>
 
             <Dialog
@@ -190,7 +217,6 @@ const ProductList = ({ products }) => {
             >
                 <DialogContent className="flex flex-col items-center justify-center p-0 overflow-hidden">
                     <div className="mb-4 flex justify-center">
-                        {/* Green shopping cart icon */}
                         <BsFillCartCheckFill className="text-[#00c853] text-[50px]" />
                     </div>
 
