@@ -8,7 +8,7 @@ import { BsFillCheckCircleFill, BsFillExclamationCircleFill } from "react-icons/
 const CheckoutPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { cartItems } = useCart();
+    const { cartItems, clearCart } = useCart();
     const [selectedItems, setSelectedItems] = useState([]);
 
     // Order Form State
@@ -162,6 +162,7 @@ const CheckoutPage = () => {
             setResultMessage('Đặt hàng thành công! Chúng tôi sẽ liên hệ sớm.');
             setIsError(false);
             setShowResultModal(true);
+            clearCart(); // Clear the cart after success
         } catch (err) {
             setIsLoading(false);
             setResultMessage('Có lỗi xảy ra, vui lòng thử lại!');
@@ -408,7 +409,12 @@ const CheckoutPage = () => {
             {/* Result Modal */}
             <Dialog
                 open={showResultModal}
-                onClose={() => setShowResultModal(false)}
+                onClose={(event, reason) => {
+                    if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
+                        return; // chặn đóng khi click ngoài hoặc bấm ESC
+                    }
+                    setShowResultModal(false);
+                }}
                 maxWidth="xs"
                 PaperProps={{
                     style: {
@@ -436,7 +442,10 @@ const CheckoutPage = () => {
 
                     <div className="flex justify-center">
                         <Button
-                            onClick={() => setShowResultModal(false)}
+                            onClick={() => {
+                                setShowResultModal(false);
+                                navigate('/');
+                            }}
                             variant="contained"
                             className="!bg-white !text-gray-800 !px-6 !py-2 !rounded-full !font-bold !normal-case hover:!bg-gray-100 !text-xs"
                         >
