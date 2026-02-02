@@ -23,7 +23,16 @@ const ProductList = ({ products }) => {
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 4; // 2 columns x 2 rows
-    const totalPages = Math.ceil(products.length / itemsPerPage);
+
+    // Tạo mảng sản phẩm ảo để fill cho đủ bộ 4 cái 1 trang (tránh bị lòi sản phẩm trang cũ sang trang cuối)
+    const displayProducts = [...products];
+    const remainder = products.length % itemsPerPage;
+    if (remainder !== 0) {
+        for (let i = 0; i < (itemsPerPage - remainder); i++) {
+            displayProducts.push({ isPlaceholder: true });
+        }
+    }
+    const totalPages = Math.ceil(displayProducts.length / itemsPerPage);
 
     useEffect(() => {
         let timer;
@@ -75,7 +84,11 @@ const ProductList = ({ products }) => {
                     className="mySwiper w-full mb-6 !h-[660px]"
                     ref={swiperRef}
                 >
-                    {products.map((product, index) => {
+                    {displayProducts.map((product, index) => {
+                        if (product.isPlaceholder) {
+                            return <SwiperSlide key={`empty-${index}`} className="!h-[310px] invisible" />;
+                        }
+
                         const name = product['TÊN SẢN PHẨM'];
                         const formatVND = (value) => {
                             if (typeof value === 'number') {
@@ -127,7 +140,7 @@ const ProductList = ({ products }) => {
                                             {name || 'Sản phẩm mới'}
                                         </h3>
 
-                                        <div className="flex flex-wrap justify-center items-center gap-2 text-sm">
+                                        <div className="flex justify-center items-center gap-2 text-sm">
                                             {hasDiscount && (
                                                 <span className="text-gray-400 line-through decoration-gray-400 text-xs">
                                                     {originalPrice}
