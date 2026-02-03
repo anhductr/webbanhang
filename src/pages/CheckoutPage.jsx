@@ -30,6 +30,7 @@ const CheckoutPage = () => {
     const [resultMessage, setResultMessage] = useState("");
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [showQRModal, setShowQRModal] = useState(false);
 
     /* ===== load tỉnh ===== */
     useEffect(() => {
@@ -113,14 +114,7 @@ const CheckoutPage = () => {
     const subtotal = calculateSubtotal();
     const total = subtotal + shippingFee - discount;
 
-    const handleConfirmOrder = async () => {
-        if (!receiverName || !receiverPhone || !addressLine || !province || !district || !ward) {
-            setResultMessage('Vui lòng điền đầy đủ thông tin giao hàng!');
-            setIsError(true);
-            setShowResultModal(true);
-            return;
-        }
-
+    const processSubmitOrder = async () => {
         const fullAddress = `${addressLine}, ${ward.name}, ${district.name}, ${province.name}`;
 
         const paymentMethodMap = {
@@ -168,6 +162,23 @@ const CheckoutPage = () => {
             setResultMessage('Có lỗi xảy ra, vui lòng thử lại!');
             setIsError(true);
             setShowResultModal(true);
+        }
+    };
+
+    const handleConfirmOrder = async () => {
+        if (!receiverName || !receiverPhone || !addressLine || !province || !district || !ward) {
+            setResultMessage('Vui lòng điền đầy đủ thông tin giao hàng!');
+            setIsError(true);
+            setShowResultModal(true);
+            return;
+        }
+
+        // Nếu là chuyển khoản hoặc QR thì hiện modal QR trước
+        if (paymentMethod === 'TRANSFER' || paymentMethod === 'QR') {
+            setShowQRModal(true);
+        } else {
+            // Nếu là COD thì gửi luôn
+            processSubmitOrder();
         }
     };
 
@@ -381,10 +392,10 @@ const CheckoutPage = () => {
                                 <span>Tạm tính</span>
                                 <span>{formatVND(subtotal)}</span>
                             </div>
-                            <div className="flex justify-between">
+                            {/* <div className="flex justify-between">
                                 <span>Phí vận chuyển</span>
                                 <span>{shippingFee === 0 ? 'Miễn phí' : formatVND(shippingFee)}</span>
-                            </div>
+                            </div> */}
                             <div className="border-t pt-2 mt-2 flex justify-between items-center">
                                 <span className="font-bold text-gray-800 text-sm">Tổng</span>
                                 <span className="font-bold text-red-600 text-[15px]">{formatVND(total)}</span>
@@ -406,6 +417,69 @@ const CheckoutPage = () => {
                 </div>
             </div>
 
+            {/* QR Payment Modal */}
+            <Dialog
+                open={showQRModal}
+                onClose={(event, reason) => {
+                    if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
+                        return; // chặn đóng khi click ngoài hoặc bấm ESC
+                    }
+                    setShowQRModal(false);
+                }}
+                maxWidth="xs"
+                PaperProps={{
+                    style: {
+                        backgroundColor: 'white',
+                        borderRadius: '12px',
+                        padding: '24px',
+                        textAlign: 'center',
+                        width: '90%',
+                        maxWidth: '400px',
+                        margin: 'auto' // Đảm bảo căn giữa tuyệt đối
+                    },
+                }}
+            >
+                <DialogContent className="flex flex-col items-center justify-center p-0 overflow-hidden">
+                    <h2 className="text-[16px] font-bold text-gray-800 mb-4 uppercase">
+                        Quét mã thanh toán
+                    </h2>
+                    <div className="w-full aspect-square bg-gray-100 rounded-lg mb-6 flex items-center justify-center overflow-hidden border">
+                        {/* Bác thay cái URL ảnh QR thật của bác vào đây nhé */}
+                        <img
+                            src="https://placehold.co/400x400?text=QR+CODE+THANH+TOAN"
+                            alt="QR Payment"
+                            className="w-full h-full object-contain"
+                        />
+                    </div>
+
+                    <div className="bg-blue-50 p-3 rounded-lg w-full mb-6">
+                        <p className="text-xs text-blue-700 leading-relaxed font-medium">
+                            Vui lòng thanh toán theo thông tin mã QR phía trên sau đó nhấn xác nhận.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col w-full gap-3">
+                        <Button
+                            onClick={() => {
+                                setShowQRModal(false);
+                                processSubmitOrder();
+                            }}
+                            variant="contained"
+                            className="!bg-red-600 !text-white !py-3 !rounded-lg !font-bold !normal-case hover:!bg-red-700 !text-sm"
+                        >
+                            Xác nhận đã thanh toán
+                        </Button>
+                        <Button
+                            onClick={() => setShowQRModal(false)}
+                            variant="text"
+                            className="!text-gray-500 !font-medium !normal-case !text-xs"
+                        >
+                            Quay lại
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
             {/* Result Modal */}
             <Dialog
                 open={showResultModal}
@@ -423,7 +497,9 @@ const CheckoutPage = () => {
                         borderRadius: '12px',
                         padding: '24px',
                         textAlign: 'center',
-                        minWidth: '320px'
+                        width: '90%',
+                        maxWidth: '400px',
+                        margin: 'auto'
                     },
                 }}
             >
@@ -441,16 +517,29 @@ const CheckoutPage = () => {
                     </h2>
 
                     <div className="flex justify-center">
-                        <Button
-                            onClick={() => {
-                                setShowResultModal(false);
-                                navigate('/');
-                            }}
-                            variant="contained"
-                            className="!bg-white !text-gray-800 !px-6 !py-2 !rounded-full !font-bold !normal-case hover:!bg-gray-100 !text-xs"
-                        >
-                            Đóng
-                        </Button>
+                        {isError ? (
+                            <Button
+                                onClick={() => {
+                                    setShowResultModal(false);
+                                }}
+                                variant="contained"
+                                className="!bg-white !text-gray-800 !px-6 !py-2 !rounded-full !font-bold !normal-case hover:!bg-gray-100 !text-xs"
+                            >
+                                Tiếp tục bổ sung thông tin
+                            </Button>
+
+                        ) : (
+                            <Button
+                                onClick={() => {
+                                    setShowResultModal(false);
+                                    navigate('/thank-you');
+                                }}
+                                variant="contained"
+                                className="!bg-white !text-gray-800 !px-6 !py-2 !rounded-full !font-bold !normal-case hover:!bg-gray-100 !text-xs"
+                            >
+                                Đóng
+                            </Button>
+                        )}
                     </div>
                 </DialogContent>
             </Dialog>
