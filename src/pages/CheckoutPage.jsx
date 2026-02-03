@@ -18,11 +18,9 @@ const CheckoutPage = () => {
     const [note, setNote] = useState("");
 
     const [province, setProvince] = useState(null);
-    const [district, setDistrict] = useState(null);
     const [ward, setWard] = useState(null);
 
     const [provinces, setProvinces] = useState([]);
-    const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
 
     // Result Modal State
@@ -32,49 +30,33 @@ const CheckoutPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [showQRModal, setShowQRModal] = useState(false);
 
-    /* ===== load tỉnh ===== */
+    /* ===== load tỉnh, thành ===== */
     useEffect(() => {
-        fetch("https://provinces.open-api.vn/api/p/")
+        fetch("https://provinces.open-api.vn/api/v2/p/")
             .then(res => res.json())
             .then(setProvinces)
             .catch(err => console.error("Error loading provinces:", err));
     }, []);
 
-    /* ===== load huyện ===== */
+    useEffect(() => {
+        console.log(province);
+    }, [province])
+
+    /* ===== load phường, xã ===== */
     useEffect(() => {
         if (!province) {
-            setDistricts([]);
-            setDistrict(null);
             setWards([]);
             setWard(null);
             return;
         }
-        fetch(`https://provinces.open-api.vn/api/p/${province.code}?depth=2`)
-            .then(res => res.json())
-            .then(data => {
-                setDistricts(data.districts || []);
-                setDistrict(null);
-                setWards([]);
-                setWard(null);
-            })
-            .catch(err => console.error("Error loading districts:", err));
-    }, [province]);
-
-    /* ===== load xã ===== */
-    useEffect(() => {
-        if (!district) {
-            setWards([]);
-            setWard(null);
-            return;
-        }
-        fetch(`https://provinces.open-api.vn/api/d/${district.code}?depth=2`)
+        fetch(`https://provinces.open-api.vn/api/v2/p/${province.code}?depth=2`)
             .then(res => res.json())
             .then(data => {
                 setWards(data.wards || []);
                 setWard(null);
             })
             .catch(err => console.error("Error loading wards:", err));
-    }, [district]);
+    }, [province]);
 
     // Payment Method State
     const [paymentMethod, setPaymentMethod] = useState('COD');
@@ -115,7 +97,7 @@ const CheckoutPage = () => {
     const total = subtotal + shippingFee - discount;
 
     const processSubmitOrder = async () => {
-        const fullAddress = `${addressLine}, ${ward.name}, ${district.name}, ${province.name}`;
+        const fullAddress = `${addressLine}, ${ward.name}, ${province.name}`;
 
         const paymentMethodMap = {
             'COD': 'Thanh toán khi nhận hàng (COD)',
@@ -166,7 +148,7 @@ const CheckoutPage = () => {
     };
 
     const handleConfirmOrder = async () => {
-        if (!receiverName || !receiverPhone || !addressLine || !province || !district || !ward) {
+        if (!receiverName || !receiverPhone || !addressLine || !province || !ward) {
             setResultMessage('Vui lòng điền đầy đủ thông tin giao hàng!');
             setIsError(true);
             setShowResultModal(true);
@@ -238,23 +220,6 @@ const CheckoutPage = () => {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-medium text-gray-700 mb-1">Quận / Huyện *</label>
-                                    <select
-                                        className="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 disabled:bg-gray-100 text-xs"
-                                        value={district ? JSON.stringify(district) : ""}
-                                        onChange={(e) => {
-                                            const val = e.target.value;
-                                            setDistrict(val ? JSON.parse(val) : null);
-                                        }}
-                                        disabled={!province}
-                                    >
-                                        <option value="">Chọn Quận/Huyện</option>
-                                        {districts.map(d => (
-                                            <option key={d.code} value={JSON.stringify(d)}>{d.name}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div>
                                     <label className="block text-xs font-medium text-gray-700 mb-1">Phường / Xã *</label>
                                     <select
                                         className="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 disabled:bg-gray-100 text-xs"
@@ -263,7 +228,7 @@ const CheckoutPage = () => {
                                             const val = e.target.value;
                                             setWard(val ? JSON.parse(val) : null);
                                         }}
-                                        disabled={!district}
+                                        disabled={!province}
                                     >
                                         <option value="">Chọn Phường/Xã</option>
                                         {wards.map(w => (
