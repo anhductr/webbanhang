@@ -6,6 +6,7 @@ const Banner = () => {
             <img
                 src="/FINAL3.png"
                 alt="Banner"
+                loading="lazy"
                 className="w-full h-auto object-cover"
             />
         </div>

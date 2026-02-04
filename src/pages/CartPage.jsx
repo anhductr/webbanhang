@@ -110,6 +110,7 @@ const CartPage = () => {
                                 <img
                                     src={item['ảnh'] || `https://placehold.co/150?text=${item['MÃ SP']}`}
                                     alt={item['TÊN SẢN PHẨM']}
+                                    loading="lazy"
                                     className="w-full h-full object-cover mix-blend-multiply"
                                 />
                             </div>

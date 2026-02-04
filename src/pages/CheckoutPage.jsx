@@ -287,6 +287,7 @@ const CheckoutPage = () => {
                                         <img
                                             src={item['ảnh'] || `https://placehold.co/150?text=${item['MÃ SP']}`}
                                             alt={item['TÊN SẢN PHẨM']}
+                                            loading="lazy"
                                             className="w-full h-full object-cover mix-blend-multiply"
                                         />
                                     </div>
@@ -410,12 +411,13 @@ const CheckoutPage = () => {
                         <img
                             src="/img/qr.jpg"
                             alt="QR Payment"
+                            loading="lazy"
                             className="w-full h-full object-contain"
                         />
                     </div>
 
                     <div className="mb-6 text-[13px] flex justify-between w-full">
-                        <span className='w-[50%] text-gray-600'>Chủ tài khoản</span> 
+                        <span className='w-[50%] text-gray-600'>Chủ tài khoản</span>
                         <span className='font-bold text-gray-800'>CONG TY TNHH TMQT HOANG VIET</span>
                     </div>
 
