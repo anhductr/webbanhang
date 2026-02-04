@@ -5,8 +5,7 @@
     "MÃ SP": "PVN532",
     "TÊN SẢN PHẨM": "Lắc bạc đồng điếu mix lam ngọc",
     "GIÁ NIÊM YẾT": 1200000,
-    "Tỷ lệ chiết khấu": 0.2,
-    "Giá sau chiết khấu": 960000,
+    "Giá sau chiết khấu": 789000,
     "ảnh": "/img/Picture1.png"
   },
   {
@@ -15,9 +14,8 @@
     "MÃ SP": "PVN531",
     "TÊN SẢN PHẨM": "Lắc bạc đồng điếu mix thạch anh trắng",
     "GIÁ NIÊM YẾT": 1200000,
-    "Tỷ lệ chiết khấu": 0.2,
-    "Giá sau chiết khấu": 960000,
-    "ảnh": "/img/Picture2.png"
+    "Giá sau chiết khấu": 789000,
+    "ảnh": "/img/Picture2.jpg"
   },
   {
     "STT": "3",
@@ -25,8 +23,7 @@
     "MÃ SP": "PVN495",
     "TÊN SẢN PHẨM": "Vòng Lu mix điếu",
     "GIÁ NIÊM YẾT": 550000,
-    "Tỷ lệ chiết khấu": 0.1,
-    "Giá sau chiết khấu": 495000,
+    "Giá sau chiết khấu": 469000,
     "ảnh": "/img/Picture3.png"
   },
   {
@@ -34,9 +31,8 @@
     "NHÓM SẢN PHẨM": "Vòng cáp",
     "MÃ SP": "PVN496",
     "TÊN SẢN PHẨM": "Vòng Hồ ly mix điếu",
-    "GIÁ NIÊM YẾT": 499000,
-    "Tỷ lệ chiết khấu": 0.05,
-    "Giá sau chiết khấu": 474050,
+    "GIÁ NIÊM YẾT": 550000,
+    "Giá sau chiết khấu": 499000,
     "ảnh": "/img/Picture4.png"
   },
   {
@@ -44,10 +40,9 @@
     "NHÓM SẢN PHẨM": "Vòng cáp",
     "MÃ SP": "PVN499",
     "TÊN SẢN PHẨM": "Vòng Túi tiền mix điếu",
-    "GIÁ NIÊM YẾT": 450000,
-    "Tỷ lệ chiết khấu": 0.05,
-    "Giá sau chiết khấu": 427500,
-    "ảnh": "/img/Picture5.jpg"
+    "GIÁ NIÊM YẾT": 550000,
+    "Giá sau chiết khấu": 499000,
+    "ảnh": "/img/Picture5.png"
   },
   {
     "STT": "6",
@@ -55,8 +50,7 @@
     "MÃ SP": "PVN497",
     "TÊN SẢN PHẨM": "Vòng Lu sơn thuỷ mix charm",
     "GIÁ NIÊM YẾT": 575000,
-    "Tỷ lệ chiết khấu": 0.1,
-    "Giá sau chiết khấu": 517500,
+    "Giá sau chiết khấu": 519000,
     "ảnh": "/img/Picture6.png"
   },
   {
@@ -65,8 +59,7 @@
     "MÃ SP": "PVN537",
     "TÊN SẢN PHẨM": "Trầm sánh mix nút thắt đồng tâm lam ngọc",
     "GIÁ NIÊM YẾT": 1280000,
-    "Tỷ lệ chiết khấu": 0.2,
-    "Giá sau chiết khấu": 1024000,
+    "Giá sau chiết khấu": 1089000,
     "ảnh": "/img/Picture7.png"
   },
   {
@@ -75,8 +68,7 @@
     "MÃ SP": "PVN105",
     "TÊN SẢN PHẨM": "Treo xe các loại",
     "GIÁ NIÊM YẾT": 850000,
-    "Tỷ lệ chiết khấu": 0.1,
-    "Giá sau chiết khấu": 765000,
+    "Giá sau chiết khấu": 789000,
     "ảnh": "/img/Picture8.png"
   },
   {
@@ -85,8 +77,7 @@
     "MÃ SP": "PVN238",
     "TÊN SẢN PHẨM": "Vòng trầm tốc kiến 108 hạt",
     "GIÁ NIÊM YẾT": 4500000,
-    "Tỷ lệ chiết khấu": 0.05,
-    "Giá sau chiết khấu": 4275000,
+    "Giá sau chiết khấu": 3825000,
     "ảnh": "/img/Picture9.png"
   },
   {
@@ -95,8 +86,61 @@
     "MÃ SP": "PVN241",
     "TÊN SẢN PHẨM": "Vòng trầm sánh lu thống",
     "GIÁ NIÊM YẾT": 3500000,
-    "Tỷ lệ chiết khấu": 0.05,
-    "Giá sau chiết khấu": 3325000,
-    "ảnh": "/img/Picture10.png"
+    "Giá sau chiết khấu": 3150000,
+    "ảnh": "/img/Picture10.jpg"
+  },
+  {
+    "STT": "11",
+    "NHÓM SẢN PHẨM": "Xông Tết",
+    "MÃ SP": "PVN558",
+    "TÊN SẢN PHẨM": "Xông Nhà Lá",
+    "GIÁ NIÊM YẾT": 210000,
+    "Giá sau chiết khấu": 200000,
+    "ảnh": "/img/Picture11.jpg"
+  },
+  {
+    "STT": "12",
+    "NHÓM SẢN PHẨM": "Xông Tết",
+    "MÃ SP": "PVN557",
+    "TÊN SẢN PHẨM": "Xông Tắm",
+    "GIÁ NIÊM YẾT": 210000,
+    "Giá sau chiết khấu": 200000,
+    "ảnh": "/img/Picture12.png"
+  },
+  {
+    "STT": "13",
+    "NHÓM SẢN PHẨM": "Xông Tết",
+    "MÃ SP": "PVN556",
+    "TÊN SẢN PHẨM": "Xông Nhà Bột",
+    "GIÁ NIÊM YẾT": 210000,
+    "Giá sau chiết khấu": 200000,
+    "ảnh": "/img/Picture13.png"
+  },
+  {
+    "STT": "14",
+    "NHÓM SẢN PHẨM": "Xông Tết",
+    "MÃ SP": "COMBO",
+    "TÊN SẢN PHẨM": "Combo xông Tết 2026",
+    "GIÁ NIÊM YẾT": 600000,
+    "Giá sau chiết khấu": 569000,
+    "ảnh": "/img/Picture14.jpg"
+  },
+  {
+    "STT": "15",
+    "NHÓM SẢN PHẨM": "Nhang hương",
+    "MÃ SP": "PVN554",
+    "TÊN SẢN PHẨM": "Nhang Bài Thảo Mộc",
+    "GIÁ NIÊM YẾT": 210000,
+    "Giá sau chiết khấu": 200000,
+    "ảnh": "/img/Picture15.png"
+  },
+   {
+    "STT": "16",
+    "NHÓM SẢN PHẨM": "Nhang hương",
+    "MÃ SP": "PVN555",
+    "TÊN SẢN PHẨM": "Nhang Trám Dân Gian",
+    "GIÁ NIÊM YẾT": 210000,
+    "Giá sau chiết khấu": 200000,
+    "ảnh": "/img/Picture16.png"
   }
 ]

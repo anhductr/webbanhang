@@ -77,10 +77,6 @@ const ProductList = ({ products }) => {
                             setCurrentPage(newPage);
                         }
                     }}
-                    navigation={{
-                        nextEl: '.swiper-button-next-custom',
-                        prevEl: '.swiper-button-prev-custom',
-                    }}
                     className="mySwiper w-full mb-6 !h-[660px]"
                     ref={swiperRef}
                 >
@@ -121,7 +117,7 @@ const ProductList = ({ products }) => {
                                             <img
                                                 src={imageSrc}
                                                 alt={name}
-                                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 mix-blend-multiply"
+                                                className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105 mix-blend-multiply"
                                                 onError={(e) => {
                                                     if (e.target.dataset.errorHandled) return;
                                                     e.target.dataset.errorHandled = true;
@@ -173,25 +169,6 @@ const ProductList = ({ products }) => {
                         )
                     })}
                 </Swiper>
-                <button
-                    onClick={() => swiperRef.current?.swiper?.slidePrev()}
-                    className="swiper-button-prev-custom absolute left-2 top-[35%] -translate-y-1/2 z-10 
-                        w-8 h-8 rounded-full !bg-black/40 !text-white flex items-center justify-center 
-                        opacity-0 group-hover/list:opacity-100 transition-all duration-300 backdrop-blur-sm shadow-lg border border-white/10 hover:!bg-black/60
-                        [&.swiper-button-disabled]:invisible [&.swiper-button-disabled]:opacity-0"
-                >
-                    <IoIosArrowBack size={20} />
-                </button>
-
-                <button
-                    onClick={() => swiperRef.current?.swiper?.slideNext()}
-                    className="swiper-button-next-custom absolute right-2 top-[35%] -translate-y-1/2 z-10 
-                        w-8 h-8 rounded-full !bg-black/40 !text-white flex items-center justify-center 
-                        opacity-0 group-hover/list:opacity-100 transition-all duration-300 backdrop-blur-sm shadow-lg border border-white/10 hover:!bg-black/60
-                        [&.swiper-button-disabled]:invisible [&.swiper-button-disabled]:opacity-0"
-                >
-                    <IoIosArrowForward size={20} />
-                </button>
             </div>
 
             {/* MUI Pagination */}

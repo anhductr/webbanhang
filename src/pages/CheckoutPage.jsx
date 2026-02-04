@@ -101,8 +101,7 @@ const CheckoutPage = () => {
 
         const paymentMethodMap = {
             'COD': 'Thanh toán khi nhận hàng (COD)',
-            'TRANSFER': 'Chuyển khoản ngân hàng',
-            'QR': 'Ví điện tử / QR Code'
+            'TRANSFER': 'Chuyển khoản ngân hàng'
         };
 
         setIsLoading(true);
@@ -155,8 +154,17 @@ const CheckoutPage = () => {
             return;
         }
 
-        // Nếu là chuyển khoản hoặc QR thì hiện modal QR trước
-        if (paymentMethod === 'TRANSFER' || paymentMethod === 'QR') {
+        // Validate phone number: exactly 10 digits
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(receiverPhone)) {
+            setResultMessage('Số điện thoại phải bao gồm đúng 10 chữ số!');
+            setIsError(true);
+            setShowResultModal(true);
+            return;
+        }
+
+        // Nếu là chuyển khoản thì hiện modal QR trước
+        if (paymentMethod === 'TRANSFER') {
             setShowQRModal(true);
         } else {
             // Nếu là COD thì gửi luôn
@@ -195,7 +203,12 @@ const CheckoutPage = () => {
                                 <input
                                     type="tel"
                                     value={receiverPhone}
-                                    onChange={(e) => setReceiverPhone(e.target.value)}
+                                    onChange={(e) => {
+                                        const value = e.target.value.replace(/[^0-9]/g, '');
+                                        if (value.length <= 10) {
+                                            setReceiverPhone(value);
+                                        }
+                                    }}
                                     className="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-xs"
                                     placeholder="Nhập số điện thoại"
                                 />
@@ -331,21 +344,6 @@ const CheckoutPage = () => {
                                     <span className="text-gray-800 font-medium text-xs">Chuyển khoản ngân hàng</span>
                                 </div>
                             </label>
-
-                            <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                                <input
-                                    type="radio"
-                                    name="payment"
-                                    value="QR"
-                                    checked={paymentMethod === 'QR'}
-                                    onChange={(e) => setPaymentMethod(e.target.value)}
-                                    className="w-4 h-4 text-red-600 focus:ring-red-500"
-                                />
-                                <div className="ml-3 flex items-center">
-                                    <IoMdQrScanner className="text-gray-600 mr-2" size={20} />
-                                    <span className="text-gray-800 font-medium text-xs">Ví điện tử / QR Code</span>
-                                </div>
-                            </label>
                         </div>
                     </div>
 
@@ -409,12 +407,16 @@ const CheckoutPage = () => {
                         Quét mã thanh toán
                     </h2>
                     <div className="w-full aspect-square bg-gray-100 rounded-lg mb-6 flex items-center justify-center overflow-hidden border">
-                        {/* Bác thay cái URL ảnh QR thật của bác vào đây nhé */}
                         <img
-                            src="https://placehold.co/400x400?text=QR+CODE+THANH+TOAN"
+                            src="/img/qr.jpg"
                             alt="QR Payment"
                             className="w-full h-full object-contain"
                         />
+                    </div>
+
+                    <div className="mb-6 text-[13px] flex justify-between w-full">
+                        <span className='w-[50%] text-gray-600'>Chủ tài khoản</span> 
+                        <span className='font-bold text-gray-800'>CONG TY TNHH TMQT HOANG VIET</span>
                     </div>
 
                     <div className="bg-blue-50 p-3 rounded-lg w-full mb-6">
