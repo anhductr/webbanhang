@@ -409,7 +409,7 @@ const CheckoutPage = () => {
                     </h2>
                     <div className="w-full aspect-square bg-gray-100 rounded-lg mb-6 flex items-center justify-center overflow-hidden border">
                         <img
-                            src="/img/qr.jpg"
+                            src="/img/qr.webp"
                             alt="QR Payment"
                             loading="lazy"
                             className="w-full h-full object-contain"
