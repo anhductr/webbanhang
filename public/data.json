@@ -134,7 +134,7 @@
     "Giá sau chiết khấu": 200000,
     "ảnh": "/img/Picture15.webp"
   },
-   {
+  {
     "STT": "16",
     "NHÓM SẢN PHẨM": "Nhang hương",
     "MÃ SP": "PVN555",
@@ -142,5 +142,14 @@
     "GIÁ NIÊM YẾT": 210000,
     "Giá sau chiết khấu": 200000,
     "ảnh": "/img/Picture16.webp"
+  },
+  {
+    "STT": "17",
+    "NHÓM SẢN PHẨM": "Nhang hương",
+    "MÃ SP": "PVN59",
+    "TÊN SẢN PHẨM": "Nhang Trầm Thiên Nhiên",
+    "GIÁ NIÊM YẾT": 210000,
+    "Giá sau chiết khấu": 200000,
+    "ảnh": "/img/Picture17.webp"
   }
 ]
