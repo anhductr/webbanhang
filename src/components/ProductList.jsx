@@ -13,7 +13,7 @@ import 'swiper/css/pagination';
 
 const ProductList = ({ products }) => {
     if (!products || products.length === 0) {
-        return <div className="text-center p-4">Loading products...</div>;
+        return <div className="text-center p-4">Đang tải danh sách sản phẩm...</div>;
     }
     const swiperRef = useRef(null);
     const navigate = useNavigate();
@@ -117,7 +117,7 @@ const ProductList = ({ products }) => {
                                             <img
                                                 src={imageSrc}
                                                 alt={name}
-                                                loading="lazy"
+                                                // loading="lazy"
                                                 className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105 mix-blend-multiply"
                                                 onError={(e) => {
                                                     if (e.target.dataset.errorHandled) return;
